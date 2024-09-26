@@ -59,14 +59,9 @@ preguntas = {
         },                                      
         {
             "pregunta": "¿Que funcion convierte una cadena de texto que se encuentra en minusculas a mayuscula?",
-            "opciones": ["A. print().upper()", "B. print().", "C. print().", "D. print()."],
-            "respuesta": "A",
-        },                                      
-        {
-            "pregunta": "¿?",
-            "opciones": ["A. ", "B. ", "C. ", "D. "],
-            "respuesta": "B"
-        }                                      
+            "opciones": ["A. print().upper()", "B. print().lower", "C. print().title", "D. print().min"],
+            "respuesta": "A"
+        }                                                              
     ],
     "musica": [
         {
