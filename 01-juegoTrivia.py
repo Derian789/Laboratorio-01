@@ -1,4 +1,4 @@
-import random
+from random import choice
 
 # Función para pedir y guardar el nombre
 def inicio(): 
@@ -7,7 +7,66 @@ def inicio():
     print("___________________________________________________")     
     return nombre
 
-nombre_usuario = inicio()  # Almacena el nombre del usuario
+# Función para mostrar opciones
+def mostrar_opciones(pregunta):
+    for texto in pregunta["opciones"]:
+        print(texto)
+
+# Función para obtener una pregunta aleatoria de una categoría
+def obtener_pregunta(categoria, preguntas):
+    if preguntas[categoria]:
+        return choice(preguntas[categoria])
+    return None
+
+# Función para verificar la respuesta del usuario
+def verificar_respuesta(respuesta_usuario, respuesta_correcta):
+    return respuesta_usuario == respuesta_correcta
+
+# Función principal del juego
+def jugar(preguntas, nombre_usuario):
+    puntuacion = 0
+    while preguntas["programacion"] or preguntas["musica"]: 
+        categoria = choice(["programacion", "musica"])     # Elegimos una categoría aleatoria
+        pregunta = obtener_pregunta(categoria, preguntas)
+
+        if pregunta:
+            print(f"{nombre_usuario}, aquí tienes tu pregunta:")
+            print(pregunta["pregunta"])  # Mostramos la pregunta
+            mostrar_opciones(pregunta)
+
+            respuesta = input("Selecciona una opción (A, B, C, D) o escribir 'salir' para salir del juego: ").upper() 
+
+            if respuesta == 'SALIR':  # Verifica si el usuario quiere salir
+                print(f"Gracias {nombre_usuario}, por jugar nuestro servidor")
+                break  
+            elif verificar_respuesta(respuesta, pregunta["respuesta"]):  # Comprueba la respuesta correcta
+                print(f"¡Es correcto {nombre_usuario}!")
+                puntuacion += 1      
+            else:
+                print(f"La respuesta es incorrecta {nombre_usuario}. ")
+                puntuacion -= 1 
+
+            print(f"Puntuación actual: {puntuacion}")
+            print("_____________________________________________")     
+            
+            # Elimina la pregunta de la categoría
+            preguntas[categoria].remove(pregunta)
+        else:
+            continue
+    
+    return puntuacion
+
+# Función para mostrar el resultado final
+def mostrar_resultado(puntuacion, nombre_usuario):
+    print("__________________________________________")
+    print("_______________RESULTADOS_________________")
+    print("__________________________________________")
+    print(f"\nFelicidades {nombre_usuario}, Tu puntuación final es: {puntuacion}")
+
+# Ejecución del programa
+
+
+ # Almacena el nombre del usuario
 
 # Creación de diccionarios con dos categorías de preguntas, opciones y respuestas
 preguntas = {
@@ -41,12 +100,7 @@ preguntas = {
             "pregunta": "¿Que palabra se usa para devolver un valor desde una funcion en python?",
             "opciones": ["A. return","B. output","C. class","D. pass"],
             "respuesta": "A",
-        },                     
-        {
-            "pregunta": "¿Que se usa para crear diccionarios?",
-            "opciones": ["A. Corchetes", "B. Llaves", "C. Parentesis", "D. Ninguno de los anteriores"],
-            "respuesta": "B",
-        },                     
+        },                                         
         {
             "pregunta": "¿Que funcion de random, sirve para dar valores aleatorios sin repeticiones?",
             "opciones": ["A. random.sample", "B. random.choice", "C. random.gauss", "D. random.choices"],
@@ -59,9 +113,14 @@ preguntas = {
         },                                      
         {
             "pregunta": "¿Que funcion convierte una cadena de texto que se encuentra en minusculas a mayuscula?",
-            "opciones": ["A. print().upper()", "B. print().lower", "C. print().title", "D. print().min"],
-            "respuesta": "A"
-        }                                                              
+            "opciones": ["A. print().upper()", "B. print().lower", "C. print().min", "D. print().title"],
+            "respuesta": "A",
+        },                                      
+        {
+            "pregunta": "¿¿Qué función permite sumar todos los elementos de una lista en Python??",
+            "opciones": ["A. add()", "B. total ()", "C. reduce()", "D. sum()"],
+            "respuesta": "D"
+        }                                      
     ],
     "musica": [
         {
@@ -117,42 +176,6 @@ preguntas = {
     ]
 }
 
-puntuacion = 0 # se incializa en 0 la puntuacion 
-
-# Mientras haya preguntas en cada categoría
-while preguntas["programacion"] or preguntas["musica"]: 
-    categoria = random.choice(["programacion", "musica"])     # Elegimos una categoría aleatoria
-    
-    if preguntas[categoria]:
-        pregunta = random.choice(preguntas[categoria])        # Elegimos una pregunta al azar de la categoría
- 
-        print(f"{nombre_usuario}, aquí tienes tu pregunta:")
-        print(pregunta["pregunta"])      # Mostramos la pregunta
- 
-        for texto in pregunta["opciones"]:       # Imprimir opciones en el orden original
-            print(texto)    
-
-        respuesta = input("Selecciona una opción (A, B, C, D) o escribir 'salir' para salir del juego: ").upper() 
-
-        if respuesta == 'SALIR':  # Verifica si el usuario quiere salir
-            print(f"Gracias {nombre_usuario}, por jugar nuestro servidor")
-            break  
-        if respuesta == pregunta["respuesta"]:  # Comprueba la respuesta correcta
-            print(f"¡Es correcto {nombre_usuario}!")
-            puntuacion += 1      
-        else:
-            print(f"La respuesta es incorrecta {nombre_usuario}. ")
-            puntuacion -= 1 
-        
-        print(f"Puntuación actual: {puntuacion}")
-        print("___________________________________________________")     
-        
-        # Elimina la pregunta de la categoría
-        preguntas[categoria].remove(pregunta)
-    else:
-        # Si no hay más preguntas en la categoría, saltamos a la siguiente iteración
-        continue
-print("__________________________________________")
-print("_______________RESULTADOS_________________")
-print("__________________________________________")
-print(f"El juego terminó. Tu puntuación final es: {puntuacion}")
+nombre_usuario = inicio()
+puntuacion_final = jugar(preguntas, nombre_usuario)
+mostrar_resultado(puntuacion_final, nombre_usuario)
